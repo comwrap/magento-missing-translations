@@ -60,7 +60,9 @@ class Collector
 
         foreach ($storeManagerDataList as $store) {
             $locale = $this->config->getValue(self::CONFIGURATION_PATH, ScopeInterface::SCOPE_STORE, $store->getID());
-            if (!in_array(substr($locale, 0, 2), $ignoredLocales)) {
+            if (!in_array(substr($locale, 0, 2), $ignoredLocales) &&
+                !in_array($locale, $this->locales)
+            ) {
                 $this->locales[] = $locale;
             }
         }

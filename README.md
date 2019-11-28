@@ -8,5 +8,5 @@ To install:
 To use the module:
  - bin/magento i18n:non-translated:detect
 
-The output is a file, containing current date in the name and ends with a .list extension, that is located in the pub/media folder. 
+The output is a file, containing current date in the name and ends with a .list extension, that is located in the /var folder. 
 

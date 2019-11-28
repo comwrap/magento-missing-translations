@@ -12,7 +12,7 @@
         <arguments>
             <argument name="directories" xsi:type="array">
                 <item name="code" xsi:type="string">app/code</item>
-                <item name="vendor" xsi:type="string">vendor</item>
+                <item name="vendor" xsi:type="string">vendor/magento</item>
             </argument>
         </arguments>
     </type>

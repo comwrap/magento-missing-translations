@@ -2,7 +2,6 @@
 
 namespace Comwrap\TranslatedPhrases\Console;
 
-use Magento\Framework\App\State;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,9 +12,6 @@ use Comwrap\TranslatedPhrases\Model\Translate\Result\Writer as ResultWriter;
 
 class DetectNonTranslated extends Command
 {
-    /** @var Magento\Framework\App\State */
-    private $appState;
-
     /** @var FileSystemCollector */
     private $fileSystemCollector;
 
@@ -25,29 +21,21 @@ class DetectNonTranslated extends Command
     /** @var ResultBuilder */
     private $resultBuilder;
 
-    /** @var ResultWriter */
-    private $resultWriter;
-
     /**
      * DetectNonTranslated constructor.
-     * @param State $appState
      * @param FileSystemCollector $fileSystemCollector
      * @param StoresCollector $storesCollector
-     * @param ResultBuilder $resultBuilder
+
      * @param ResultWriter $resultWriter
      */
     public function __construct(
-        State $appState,
         FileSystemCollector $fileSystemCollector,
         StoresCollector $storesCollector,
-        ResultBuilder $resultBuilder,
-        ResultWriter $resultWriter
+        ResultBuilder $resultBuilder
     ) {
-        $this->appState = $appState;
         $this->fileSystemCollector = $fileSystemCollector;
         $this->storesCollector = $storesCollector;
         $this->resultBuilder = $resultBuilder;
-        $this->resultWriter = $resultWriter;
         parent::__construct();
     }
 
@@ -61,8 +49,6 @@ class DetectNonTranslated extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
-
         /** Collect locales */
         $locales = $this->storesCollector->collectLocales();
 
@@ -70,9 +56,6 @@ class DetectNonTranslated extends Command
         $phrases = $this->fileSystemCollector->collectPhrases();
 
         /** Build list */
-        $list = $this->resultBuilder->buildList($locales, $phrases);
-
-        /** Write results */
-        $this->resultWriter->writeList($list);
+        $this->resultBuilder->buildList($locales, $phrases);
     }
 }
