@@ -1,12 +1,10 @@
 <?php
 
+namespace Comwrap\TranslatedPhrases\Model\Filesystem\Parser;
 
-namespace Comwrap\TranslatedPhrases\Model\Filesystem;
-
-use Comwrap\TranslatedPhrases\Model\Filesystem\DirectoryRegistry;
 use Comwrap\TranslatedPhrases\Model\Filesystem\Scanner;
 
-class Collector
+class RegEx implements ParserInterface
 {
     /** @var string  */
     const REGEX_PRIMARY = '/(__\(.*?\'\))/';
@@ -32,46 +30,32 @@ class Collector
     /** @var array */
     private $phrases = [];
 
-    /** @var DirectoryRegistry */
-    private $directoryRegistry;
-
     /** @var Scanner */
     private $scanner;
 
     /**
      * Collector constructor.
-     * @param \Comwrap\TranslatedPhrases\Model\Filesystem\DirectoryRegistry $directoryRegistry
      * @param \Comwrap\TranslatedPhrases\Model\Filesystem\Scanner $scanner
      */
     public function __construct(
-        DirectoryRegistry $directoryRegistry,
         Scanner $scanner
     ) {
-        $this->directoryRegistry = $directoryRegistry;
         $this->scanner = $scanner;
     }
 
     /**
+     * @param string $directory
+     * @param bool $withContext
      * @return array
      */
-    public function getPhrases()
+    public function getPhrases($directory, $withContext = false)
     {
-        return $this->phrases;
-    }
-
-    /**
-     * @return array
-     */
-    public function collectPhrases()
-    {
-        foreach ($this->directoryRegistry->getDirectories() as $dir) {
-            $files = $this->scanner->getDirContents($dir);
-            foreach ($files as $file) {
-                $this->processFile($file);
-            }
+        $files = $this->scanner->getDirContents($directory);
+        foreach ($files as $file) {
+            $this->processFile($file);
         }
 
-        return $this->getPhrases();
+        return $this->phrases;
     }
 
     /**

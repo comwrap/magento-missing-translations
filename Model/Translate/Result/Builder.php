@@ -63,6 +63,16 @@ class Builder
             . date(self::DATE_FORMAT)
             . self::FILENAME_SUFFIX;
 
+        $varDir->writeFile(
+            $fileName,
+            sprintf(
+                'Found are %1$d phrases that will be passed through %2$s locales',
+                sizeof($phrases),
+                sizeof($locales)
+            ) . self::NEW_ROW,
+            self::WRITE_MODE
+        );
+
         foreach ($locales as $locale) {
             foreach ($phrases as $phrase) {
                 if ($phrase == $this->translator->getTranslation($phrase, $locale)) {

@@ -8,11 +8,19 @@
             </argument>
         </arguments>
     </type>
+    <type name="Comwrap\TranslatedPhrases\Model\Filesystem\Parser">
+        <arguments>
+            <argument name="parserAgents" xsi:type="array">
+                <item name="native" xsi:type="object">Comwrap\TranslatedPhrases\Model\Filesystem\Parser\Native</item>
+                <item name="regEx" xsi:type="object">Comwrap\TranslatedPhrases\Model\Filesystem\Parser\RegEx</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Comwrap\TranslatedPhrases\Model\Filesystem\DirectoryRegistry">
         <arguments>
             <argument name="directories" xsi:type="array">
                 <item name="code" xsi:type="string">app/code</item>
-                <item name="vendor" xsi:type="string">vendor/magento</item>
+                <item name="vendor" xsi:type="string">vendor</item>
             </argument>
         </arguments>
     </type>

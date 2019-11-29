@@ -5,40 +5,41 @@ namespace Comwrap\TranslatedPhrases\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Comwrap\TranslatedPhrases\Model\Filesystem\Collector as FileSystemCollector;
 use Comwrap\TranslatedPhrases\Model\Stores\Collector as StoresCollector;
+use Comwrap\TranslatedPhrases\Model\Filesystem\Parser as FileSystemParser;
 use Comwrap\TranslatedPhrases\Model\Translate\Result\Builder as ResultBuilder;
-use Comwrap\TranslatedPhrases\Model\Translate\Result\Writer as ResultWriter;
 
 class DetectNonTranslated extends Command
 {
-    /** @var FileSystemCollector */
-    private $fileSystemCollector;
-
     /** @var StoresCollector */
     private $storesCollector;
+
+    /** @var FileSystemCollector */
+    private $fileSystemCollector;
 
     /** @var ResultBuilder */
     private $resultBuilder;
 
     /**
      * DetectNonTranslated constructor.
-     * @param FileSystemCollector $fileSystemCollector
      * @param StoresCollector $storesCollector
-
-     * @param ResultWriter $resultWriter
+     * @param FileSystemParser $fileSystemCollector
+     * @param ResultBuilder $resultBuilder
      */
     public function __construct(
-        FileSystemCollector $fileSystemCollector,
         StoresCollector $storesCollector,
+        FileSystemParser $fileSystemCollector,
         ResultBuilder $resultBuilder
     ) {
-        $this->fileSystemCollector = $fileSystemCollector;
         $this->storesCollector = $storesCollector;
+        $this->fileSystemCollector = $fileSystemCollector;
         $this->resultBuilder = $resultBuilder;
         parent::__construct();
     }
 
+    /**
+     * Configure the command
+     */
     protected function configure()
     {
         $this->setName('i18n:non-translated:detect');
@@ -47,13 +48,19 @@ class DetectNonTranslated extends Command
         parent::configure();
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     * @throws \Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** Collect locales */
         $locales = $this->storesCollector->collectLocales();
 
         /** Collect phrases */
-        $phrases = $this->fileSystemCollector->collectPhrases();
+        $phrases = $this->fileSystemCollector->getPhrases();
 
         /** Build list */
         $this->resultBuilder->buildList($locales, $phrases);
