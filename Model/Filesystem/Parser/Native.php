@@ -2,6 +2,7 @@
 
 namespace Comwrap\TranslatedPhrases\Model\Filesystem\Parser;
 
+use Comwrap\TranslatedPhrases\Helper\Configuration;
 use Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory;
 use Magento\Setup\Module\I18n\Parser\Parser;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
@@ -21,18 +22,25 @@ class Native implements ParserInterface
 
     /** @var array */
     private $phrases = [];
+    /**
+     * @var Configuration
+     */
+    private $configuration;
 
     /**
      * Native constructor.
      * @param ResolverFactory $resolverFactory
      * @param Parser $parser
+     * @param Configuration $configuration
      */
     public function __construct(
         ResolverFactory $resolverFactory,
-        Parser $parser
+        Parser $parser,
+        Configuration $configuration
     ) {
         $this->resolverFactory = $resolverFactory;
         $this->parser = $parser;
+        $this->configuration = $configuration;
 
         foreach ($this->prepareAdapters() as $type => $adapter) {
             $this->parser->addAdapter($type, $adapter);
@@ -49,11 +57,35 @@ class Native implements ParserInterface
         /** @var  $optionResolver */
         $optionResolver = $this->resolverFactory->create($directory, $withContext);
 
+        /** @var array $options */
+        $options = $optionResolver->getOptions();
+
         /** Parse */
-        $this->parser->parse($optionResolver->getOptions());
+        $this->parser->parse(
+            $this->configuration->skipBackendScanning() ? $this->updateOptionsFileMask($options) : $options
+        );
 
         /** Get Phrases */
         return $this->phrasesToString($this->parser->getPhrases());
+    }
+
+    /**
+     * @param array $options
+     * @return mixed
+     */
+    private function updateOptionsFileMask($options)
+    {
+        foreach ($options as &$option) {
+            if (!isset($option['fileMask'])) {
+                continue;
+            }
+
+            /** @var string $originalFileMask */
+            $originalFileMask = trim($option['fileMask'], "/");
+            $option['fileMask'] = "/(^((?!adminhtml).)*)(" . $originalFileMask . ")/i";
+        }
+
+        return $options;
     }
 
     /**
