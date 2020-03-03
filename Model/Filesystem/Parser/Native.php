@@ -4,7 +4,7 @@ namespace Comwrap\TranslatedPhrases\Model\Filesystem\Parser;
 
 use Comwrap\TranslatedPhrases\Helper\Configuration;
 use Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory;
-use Magento\Setup\Module\I18n\Parser\Parser;
+use Comwrap\TranslatedPhrases\Model\Filesystem\Parser\Native\Parser as ExtendedParser;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php;
@@ -30,12 +30,12 @@ class Native implements ParserInterface
     /**
      * Native constructor.
      * @param ResolverFactory $resolverFactory
-     * @param Parser $parser
+     * @param ExtendedParser $parser
      * @param Configuration $configuration
      */
     public function __construct(
         ResolverFactory $resolverFactory,
-        Parser $parser,
+        ExtendedParser $parser,
         Configuration $configuration
     ) {
         $this->resolverFactory = $resolverFactory;
@@ -52,7 +52,7 @@ class Native implements ParserInterface
      * @param bool $withContext
      * @return string[]
      */
-    public function getPhrases($directory, $withContext = false)
+    public function getPhrases($directory, $excluded = null, $withContext = false)
     {
         /** @var  $optionResolver */
         $optionResolver = $this->resolverFactory->create($directory, $withContext);
@@ -61,8 +61,9 @@ class Native implements ParserInterface
         $options = $optionResolver->getOptions();
 
         /** Parse */
-        $this->parser->parse(
-            $this->configuration->skipBackendScanning() ? $this->updateOptionsFileMask($options) : $options
+        $this->parser->parseUsingExclusions(
+            $this->configuration->skipBackendScanning() ? $this->updateOptionsFileMask($options) : $options,
+            $excluded
         );
 
         /** Get Phrases */

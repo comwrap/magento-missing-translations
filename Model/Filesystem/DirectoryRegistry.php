@@ -9,9 +9,13 @@ class DirectoryRegistry
      * @param array $directories
      */
     public function __construct(
-        array $directories = []
+        array $directories = [],
+        array $ignoredMagentoModules = [],
+        array $ignoredSubDirectories = []
     ) {
         $this->directories = $directories;
+        $this->ignoredMagentoModules = $ignoredMagentoModules;
+        $this->ignoredSubDirectories = $ignoredSubDirectories;
     }
 
     /**
@@ -20,5 +24,13 @@ class DirectoryRegistry
     public function getDirectories()
     {
         return $this->directories;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIgnoredSubDirectories()
+    {
+        return array_merge($this->ignoredMagentoModules, $this->ignoredSubDirectories);
     }
 }
