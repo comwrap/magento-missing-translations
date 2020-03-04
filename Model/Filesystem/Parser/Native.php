@@ -111,14 +111,48 @@ class Native implements ParserInterface
      */
     private function phrasesToString($phrases)
     {
+        /** @var bool $targetSentencesActivated */
+        $targetSentencesActivated = $this->configuration->targetSentences();
         /** @var string[] $result */
         $result = [];
 
         foreach ($phrases as $phrase) {
-            $result[] = $phrase->getPhrase();
+            if ($targetSentencesActivated) {
+                if ($this->phraseIsSentensceLike($phrase->getPhrase())) {
+                    $result[] = $phrase->getPhrase();
+                }
+            } else {
+                $result[] = $phrase->getPhrase();
+            }
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $phrase
+     * @return bool
+     */
+    private function phraseIsSentensceLike($phrase)
+    {
+        /** @var string $pattern */
+        $pattern = $pattern = "/([\'\"\%]*)(^[a-zA-Z0-9\-\'\:\(\)]+)([\.\,\:]?)$/";
+        /** @var array $words */
+        $words = explode(" ", trim($phrase));
+        /** @var int $wordLikeSegments */
+        $wordLikeSegments = 0;
+
+        foreach ($words as $word) {
+            if(preg_match($pattern, $word)) {
+                $wordLikeSegments++;
+            }
+        }
+
+        if(sizeof($words) - $wordLikeSegments <= $wordLikeSegments) {
+            return true;
+        }
+
+        return false;
     }
 }
 

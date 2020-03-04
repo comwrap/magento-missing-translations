@@ -27,7 +27,7 @@ class DirectoryFilter extends \RecursiveFilterIterator
      */
     public function accept()
     {
-        return !($this->isDir() && $this->matchesExcluded($this->getFilename()));
+        return !($this->matchesExcluded($this->getFilename()));
     }
 
     /**
