@@ -10,6 +10,9 @@ class Configuration
     /** @var string  */
     const SKIP_ADMIN_CONFIG_PATH = 'dev/translated_phrases/skip_backend';
 
+    /** @var string  */
+    const TARGET_SENTENCES_CONFIG_PATH = 'dev/translated_phrases/target_sentences';
+
     /** @var ScopeConfigInterface */
     private $scopeConfig;
 
@@ -29,5 +32,13 @@ class Configuration
     public function skipBackendScanning()
     {
         return  $this->scopeConfig->getValue(self::SKIP_ADMIN_CONFIG_PATH, ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function targetSentences()
+    {
+        return  $this->scopeConfig->getValue(self::TARGET_SENTENCES_CONFIG_PATH, ScopeInterface::SCOPE_STORE);
     }
 }

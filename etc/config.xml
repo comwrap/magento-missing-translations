@@ -4,7 +4,8 @@
     <default>
         <dev>
             <translated_phrases>
-                <skip_backend>1</skip_backend>
+                <skip_backend>0</skip_backend>
+                <target_sentences>0</target_sentences>
             </translated_phrases>
         </dev>
     </default>

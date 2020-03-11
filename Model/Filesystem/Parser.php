@@ -36,7 +36,13 @@ class Parser
         /** @var ParserInterface $parserAgent */
         foreach ($this->parserAgents as $parserAgent) {
             foreach ($this->directoryRegistry->getDirectories() as $dir) {
-                $this->phrases = array_merge($this->phrases, array_diff($parserAgent->getPhrases($dir), $this->phrases));
+                $this->phrases = array_merge(
+                    $this->phrases,
+                    array_diff(
+                        $parserAgent->getPhrases($dir, $this->directoryRegistry->getIgnoredSubDirectories()),
+                        $this->phrases
+                    )
+                );
             }
         }
 

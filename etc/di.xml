@@ -12,7 +12,6 @@
         <arguments>
             <argument name="parserAgents" xsi:type="array">
                 <item name="native" xsi:type="object">Comwrap\TranslatedPhrases\Model\Filesystem\Parser\Native</item>
-                <item name="regEx" xsi:type="object">Comwrap\TranslatedPhrases\Model\Filesystem\Parser\RegEx</item>
             </argument>
         </arguments>
     </type>
@@ -21,6 +20,26 @@
             <argument name="directories" xsi:type="array">
                 <item name="code" xsi:type="string">app/code</item>
                 <item name="vendor" xsi:type="string">vendor</item>
+            </argument>
+            <argument name="ignoredMagentoModules" xsi:type="array">
+                <item name="amasty" xsi:type="string">amasty</item>
+                <item name="authorizenet" xsi:type="string">authorizenet</item>
+                <item name="braintree" xsi:type="string">braintree</item>
+                <item name="cybersource" xsi:type="string">cybersource</item>
+                <item name="dotmailer" xsi:type="string">dotmailer</item>
+                <item name="mageplaza" xsi:type="string">mageplaza</item>
+                <item name="klarna" xsi:type="string">klarna</item>
+                <item name="yotpo" xsi:type="string">yotpo</item>
+                <item name="developer" xsi:type="string">developer</item>
+                <item name="support" xsi:type="string">support</item>
+            </argument>
+            <argument name="ignoredSubDirectories" xsi:type="array">
+                <item name="test" xsi:type="string">test</item>
+                <item name="graph-ql" xsi:type="string">graph-ql</item>
+                <item name="composer" xsi:type="string">composer</item>
+                <item name="import" xsi:type="string">import</item>
+                <item name="export" xsi:type="string">export</item>
+                <item name="framework" xsi:type="string">framework</item>
             </argument>
         </arguments>
     </type>
